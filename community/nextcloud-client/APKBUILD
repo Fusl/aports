@@ -2,7 +2,7 @@
 # Maintainer: Leonardo Arena <rnalrd@alpinelinux.org>
 pkgname=nextcloud-client
 _realname=client_theming
-pkgver=2.3.1
+pkgver=2.3.2
 pkgrel=1
 pkgdesc="Nextcloud Desktop Client"
 url="https://github.com/nextcloud/client_theming"
@@ -40,5 +40,5 @@ package() {
 	# install -m644 -D "$srcdir"/$pkgname.confd "$pkgdir"/etc/conf.d/$pkgname
 }
 
-sha512sums="582a017431da41a0bf2ad745e24560b0641ac815c6c296b2a5bdfa4e56e90a4b141392834e3b30f452d2ad9399290416894d349726a75d916e2ed48ac53343d4  owncloud-client-2.3.1.tar.gz
-f8210c8cc08e0bfb80e63b18af305c2a8e2309f673caca5bc748c130d960d444ab2db3fad3e43dbfffbe072748c85e15a50d0ebe1fd491dec7553ac8d9552cfe  nextcloud-client-2.3.1.tar.gz"
+sha512sums="33c2ae87794db3bce8293a07098f02b0b8434daf81f77d4108c7a5f55388a8b6712847b4409edd75a7b91f42a73846704302d67735fb05b923c09d021e8b3910  owncloud-client-2.3.2.tar.gz
+0447a3e5ee3338cb98b9d503a94d32c926f9092a25fee11e3686e5d662362137dce09865350cdc3c9af62ac8a6ebfa7fcd00f817edbb10189512a6df8e587628  nextcloud-client-2.3.2.tar.gz"

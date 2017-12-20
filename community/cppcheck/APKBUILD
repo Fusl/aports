@@ -1,7 +1,7 @@
 # Contributor: August Klein <amatcoder@gmail.com>
 # Maintainer: André Klitzing <aklitzing@gmail.com>
 pkgname=cppcheck
-pkgver=1.79
+pkgver=1.81
 pkgrel=0
 pkgdesc="A static analysis tool for C/C++ code"
 url="http://cppcheck.sourceforge.net"
@@ -16,23 +16,23 @@ builddir="$srcdir/$pkgname-$pkgver"
 
 build() {
 	cd "$builddir"
-	make DB2MAN=/usr/share/xml/docbook/xsl-stylesheets-*/manpages/docbook.xsl man || return 1
+	make DB2MAN=/usr/share/xml/docbook/xsl-stylesheets-*/manpages/docbook.xsl man
 
 	cd gui
-	lrelease-qt5 gui.pro || return 1
-	qmake-qt5 HAVE_RULES=yes || return 1
-	make SRCDIR=build CFGDIR=/usr/share/cppcheck/cfg HAVE_RULES=yes || return 1
+	lrelease-qt5 gui.pro
+	qmake-qt5 HAVE_RULES=yes
+	make SRCDIR=build CFGDIR=/usr/share/cppcheck/cfg HAVE_RULES=yes
 }
 
 check() {
 	cd "$builddir"
-	make SRCDIR=build check || return 1
+	make SRCDIR=build check
 }
 
 package() {
 	cd "$builddir"
-	make DESTDIR="$pkgdir" CFGDIR=/usr/share/cppcheck/cfg HAVE_RULES=yes install || return 1
-	install -Dm644 cppcheck.1 "$pkgdir"/usr/share/man/man1/cppcheck.1 || return 1
+	make DESTDIR="$pkgdir" CFGDIR=/usr/share/cppcheck/cfg HAVE_RULES=yes install
+	install -Dm644 cppcheck.1 "$pkgdir"/usr/share/man/man1/cppcheck.1
 }
 
 htmlreport() {
@@ -50,11 +50,11 @@ gui() {
 
 	cd "$builddir"
 	mkdir -p "$subpkgdir"/usr/bin
-	mv gui/$subpkgname "$subpkgdir"/usr/bin/ || return 1
+	mv gui/$subpkgname "$subpkgdir"/usr/bin/
 
 	mkdir -p "$subpkgdir"/usr/share/cppcheck/lang/
 	mv gui/cppcheck*.qm "$subpkgdir"/usr/share/cppcheck/lang/
 }
 
-sha512sums="3c1bd96118820ca704b13ec3242ae5c78035ca5ee7acc41ee32b9a1d39e57997a22d27a4cd34518d430d4f8ed1c9796c20d7c736210c9f0eee3d1f05e599f71f  cppcheck-1.79.tar.gz
+sha512sums="fdd96a6a362af3c0d5e8fbaa417c7ba97235f0a8779c20d1d04f7aaedacfba95b6b34ec01b6929f1f67f48b93815d9404e952cb53e1de1c3787cc63c5ae33000  cppcheck-1.81.tar.gz
 76f0699273347068b562d001cf6701ef3180506d21bd9298a6b1f2e522ea3c32b1cc350128a2c0b8d69b89aa3c0992b04e9d641ae170b51e3073acb3c6ca7b6e  set_datadir.patch"

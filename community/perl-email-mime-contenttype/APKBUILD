@@ -3,7 +3,7 @@
 # Maintainer: Francesco Colista <fcolista@alpinelinux.org>
 pkgname=perl-email-mime-contenttype
 _pkgreal=Email-MIME-ContentType
-pkgver=1.020
+pkgver=1.022
 pkgrel=0
 pkgdesc="Parse a MIME Content-Type Header"
 url="http://search.cpan.org/dist/Email-MIME-ContentType/"
@@ -40,4 +40,4 @@ package() {
 	find "$pkgdir" \( -name perllocal.pod -o -name .packlist \) -delete
 }
 
-sha512sums="068ca2188b502d0c37cf3704b705dcfeac32f7c4d98cce3ccdea50977770b2ddb4da1e711ad7af456af44a605447c79d88cb286bffd2a6455957641bba34bb78  Email-MIME-ContentType-1.020.tar.gz"
+sha512sums="38561922e0dbc180ac24003a3b64ef39e25a5607bbedc75a3e4580490ab84e02bfd5165225eff4884112cf1f82ec46ee62f31c047acea6b9a3cca390deb965be  Email-MIME-ContentType-1.022.tar.gz"

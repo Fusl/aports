@@ -1,14 +1,18 @@
 # Contributor: Łukasz Jendrysik <scadu@yandex.com>
 # Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=git
-pkgver=2.13.3
-pkgrel=0
+pkgver=2.15.0
+pkgrel=1
 pkgdesc="A distributed version control system"
 url="https://www.git-scm.com/"
 arch="all"
 license="GPL2+"
 depends=
 replaces="git-perl"
+
+# secfixes:
+#   2.14.1:
+#   - CVE-2017-1000117
 
 # note that order matters
 subpackages="$pkgname-doc
@@ -30,42 +34,48 @@ subpackages="$pkgname-doc
 	"
 # we need tcl and tk to be built before git due to git-gui and gitk
 makedepends="zlib-dev libressl-dev curl-dev expat-dev perl-dev python2-dev
-	pcre-dev asciidoc xmlto perl-error tcl tk"
+	pcre2-dev asciidoc xmlto perl-error tcl tk"
 source="https://www.kernel.org/pub/software/scm/git/git-$pkgver.tar.xz
 	bb-tar.patch
 	git-daemon.initd
 	git-daemon.confd
 	"
 
-_makeopts="
-	NO_GETTEXT=YesPlease
-	NO_NSEC=YesPlease
-	NO_SVN_TESTS=YesPlease
-	NO_REGEX=YesPlease
-	USE_LIBPCRE=1"
-
 _gitcoredir=/usr/libexec/git-core
-_builddir="$srcdir"/$pkgname-$pkgver
+builddir="$srcdir"/$pkgname-$pkgver
+
+prepare() {
+	default_prepare
+	cat >> config.mak <<-EOF
+		NO_GETTEXT=YesPlease
+		NO_SVN_TESTS=YesPlease
+		NO_REGEX=YesPlease
+		USE_LIBPCRE2=YesPlease
+		NO_NSEC=YesPlease
+		NO_SYS_POLL_H=1
+		CFLAGS=$CFLAGS
+	EOF
+}
 
 build() {
-	cd "$_builddir"
-	make -j1 prefix=/usr DESTDIR="$pkgdir" $_makeopts perl/perl.mak || return 1
-	make prefix=/usr DESTDIR="$pkgdir" $_makeopts || return 1
+	cd "$builddir"
+	make -j1 prefix=/usr DESTDIR="$pkgdir" perl/perl.mak
+	make prefix=/usr DESTDIR="$pkgdir"
 }
 
 package() {
-	cd "$_builddir"
+	cd "$builddir"
 	make -j1 prefix=/usr \
 		DESTDIR="$pkgdir" \
 		INSTALLDIRS=vendor \
-		$_makeopts install || return 1
+		install
 	mkdir -p "$pkgdir"/var/git
 	install -Dm755 "$srcdir"/git-daemon.initd \
-		"$pkgdir"/etc/init.d/git-daemon || return 1
+		"$pkgdir"/etc/init.d/git-daemon
 	install -Dm644 "$srcdir"/git-daemon.confd \
-		"$pkgdir"/etc/conf.d/git-daemon || return 1
+		"$pkgdir"/etc/conf.d/git-daemon
 
-	make prefix=/usr DESTDIR="$pkgdir" install-man || return 1
+	make prefix=/usr DESTDIR="$pkgdir" install-man
 }
 
 _perl_git_svn() {
@@ -84,8 +94,8 @@ _perl_git() {
 	eval local `perl -V:vendorlib`
 	eval local `perl -V:vendorarch`
 	for i in $vendorlib $vendorarch; do
-		mkdir -p "$subpkgdir"/${i%/*} || return 1
-		mv "$pkgdir"/$i "$subpkgdir"/$i || return 1
+		mkdir -p "$subpkgdir"/${i%/*}
+		mv "$pkgdir"/$i "$subpkgdir"/$i
 	done
 }
 
@@ -116,9 +126,9 @@ cvs() {
 	depends="perl perl-git=$pkgver-r$pkgrel cvs perl-dbd-sqlite"
 	replaces="git-perl"
 	mkdir -p "$subpkgdir"/usr/bin "$subpkgdir"/$_gitcoredir
-	mv "$pkgdir"/usr/bin/git-cvs* "$subpkgdir"/usr/bin/ || return 1
+	mv "$pkgdir"/usr/bin/git-cvs* "$subpkgdir"/usr/bin/
 	mv "$pkgdir"/$_gitcoredir/*cvs* "$subpkgdir"/$_gitcoredir \
-		|| return 1
+
 }
 
 _fast_import() {
@@ -133,9 +143,9 @@ p4() {
 	depends="git=$pkgver-r$pkgrel git-fast-import=$pkgver-r$pkgrel"
 	replaces="git"
 	mkdir -p "$subpkgdir"/$_gitcoredir/mergetools
-	mv "$pkgdir"/$_gitcoredir/*p4* "$subpkgdir"/$_gitcoredir/ || return 1
+	mv "$pkgdir"/$_gitcoredir/*p4* "$subpkgdir"/$_gitcoredir/
 	mv "$pkgdir"/$_gitcoredir/mergetools/*p4* \
-		"$subpkgdir"/$_gitcoredir/mergetools/ || return 1
+		"$subpkgdir"/$_gitcoredir/mergetools/
 }
 
 daemon() {
@@ -147,8 +157,8 @@ daemon() {
 		"$pkgdir"/$_gitcoredir/git-http-backend \
 		"$pkgdir"/$_gitcoredir/git-shell \
 		"$subpkgdir"/$_gitcoredir \
-		|| return 1
-	mv "$pkgdir"/etc "$subpkgdir"/ || return 1
+
+	mv "$pkgdir"/etc "$subpkgdir"/
 }
 
 gitweb() {
@@ -166,7 +176,7 @@ completion() {
 	replaces=""
 	install_if="$pkgname=$pkgver-r$pkgrel bash-completion"
 
-	install -Dm644 "$_builddir"/contrib/completion/git-completion.bash \
+	install -Dm644 "$builddir"/contrib/completion/git-completion.bash \
 		"$subpkgdir"/usr/share/bash-completion/completions/git
 }
 
@@ -175,8 +185,8 @@ subtree() {
 	pkgdesc="Split git repository into subtrees"
 	replaces=""
 
-	cd "$_builddir"/contrib/subtree
-	make prefix=/usr DESTDIR="$pkgdir" || return 1
+	cd "$builddir"/contrib/subtree
+	make prefix=/usr DESTDIR="$pkgdir"
 	make install prefix=/usr DESTDIR="$subpkgdir"
 }
 
@@ -185,8 +195,8 @@ subtree_doc() {
 	pkgdesc="Split git repository into subtrees (documentation)"
 	replaces=""
 
-	cd "$_builddir"/contrib/subtree
-	make install-man prefix=/usr DESTDIR="$subpkgdir" || return 1
+	cd "$builddir"/contrib/subtree
+	make install-man prefix=/usr DESTDIR="$subpkgdir"
 	gzip -9 "$subpkgdir"/usr/share/man/man1/git-subtree.1
 }
 
@@ -230,7 +240,7 @@ _git_perl() {
 }
 
 
-sha512sums="8a8db4d675c9d8d0e834620c5c7ce7937edd7f4bf1d8a176e1218e5773960e2635c48cb931dfe206b237e2da8371e521acf9c2776847605bea13f8a7304c9f9b  git-2.13.3.tar.xz
+sha512sums="994704b440ebce104a99d815dd713af3173f29e70646d7135c3fcd1ac4694a26e499f0732843606c397cbf6108809eb397546c837623a4adbe1ccb2fc825cb64  git-2.15.0.tar.xz
 85767b5e03137008d6a96199e769e3979f75d83603ac8cb13a3481a915005637409a4fd94e0720da2ec6cd1124f35eba7cf20109a94816c4b4898a81fbc46bd2  bb-tar.patch
 89528cdd14c51fd568aa61cf6c5eae08ea0844e59f9af9292da5fc6c268261f4166017d002d494400945e248df6b844e2f9f9cd2d9345d516983f5a110e4c42a  git-daemon.initd
 fbf1f425206a76e2a8f82342537ed939ff7e623d644c086ca2ced5f69b36734695f9f80ebda1728f75a94d6cd2fcb71bf845b64239368caab418e4d368c141ec  git-daemon.confd"

@@ -8,14 +8,19 @@
 # secfixes:
 #   6.11.1-r0:
 #     - CVE-2017-1000381
+#   6.11.5-r0:
+#     - CVE-2017-14919
+#   8.9.3-r0:
+#     - CVE-2017-15896
+#     - CVE-2017-15897
 #
 pkgname=nodejs
 # Note: Update only to even-numbered versions (e.g. 6.y.z, 8.y.z)!
 # Odd-numbered versions are supported only for 9 months by upstream.
-pkgver=6.11.1
-pkgrel=2
+pkgver=8.9.3
+pkgrel=0
 pkgdesc="JavaScript runtime built on V8 engine - LTS version"
-url="http://nodejs.org/"
+url="https://nodejs.org/"
 arch="all"
 license="MIT"
 depends="ca-certificates"
@@ -27,8 +32,7 @@ subpackages="$pkgname-dev $pkgname-doc $pkgname-npm::noarch"
 provides="nodejs-lts=$pkgver"  # for backward compatibility
 replaces="nodejs-current nodejs-lts"  # nodejs-lts for backward compatibility
 source="https://nodejs.org/dist/v$pkgver/node-v$pkgver.tar.gz
-	dont-run-gyp-files-for-bundled-deps.patch
-	ppc-fix-musl-mcontext.patch"
+	dont-run-gyp-files-for-bundled-deps.patch"
 builddir="$srcdir/node-v$pkgver"
 
 prepare() {
@@ -82,17 +86,13 @@ package() {
 
 dev() {
 	provides="nodejs-lts-dev=$pkgver"  # for backward compatibility
-
 	default_dev
-
-	# Remove some junk.
-	rm -r "$subpkgdir"/usr/lib/node_modules
-	rmdir -p "$subpkgdir"/usr/lib || :
 }
 
 npm() {
 	pkgdesc="A package manager for JavaScript"
 	depends="$pkgname"
+	provides="nodejs-current-npm"  # for backward compatibility
 	replaces="nodejs-current-npm $pkgname"  # $pkgname for backward compatibility
 
 	mkdir -p "$subpkgdir"/usr/bin
@@ -102,6 +102,5 @@ npm() {
 	mv "$pkgdir"/usr/lib/node_modules/npm "$subpkgdir"/usr/lib/node_modules/
 }
 
-sha512sums="72a622ed5b884ddfc467ca665c5ba0ed03093dff221664359fe5587f24c2c9a95775002089528fad56bdfafce2489c912638e68a7e10c74a730b07cbde28fab6  node-v6.11.1.tar.gz
-a8be538158b7c96341a407acba30450ddc5c3ad764e7efe728d1ceff64efc3067b177855b9ef91b54400be6a02600d83da4c21a07ae9d7dc0774f92b2006ea8b  dont-run-gyp-files-for-bundled-deps.patch
-54a96cdc103bdffa9ba5283f59c64a35774e272f3a944d6475e3f669f95f7d75bcca6db3b12b9af76ea463f531763105aeabb302872652ced6a2bcb66f1eace0  ppc-fix-musl-mcontext.patch"
+sha512sums="f5c605716749e4df5886523800470bd017bc03508d11f0f59480cac5858646faacd32a047aa0acbbb814cfc2b8fba5793be7e9567fbc300eb27366cb343a04d7  node-v8.9.3.tar.gz
+ba95f21b1e80717ef63941854e7ed412f64a91da068c0dbf0d6d9697333ee266c9f4cd7bf1a01111eeb28aa66adefd8a58cfb3e82debb84b43e35e9dc914dd36  dont-run-gyp-files-for-bundled-deps.patch"

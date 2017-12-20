@@ -1,7 +1,7 @@
 # Contributor: Carlo Landmeter <clandmeter@gmail.com>
 # Maintainer: Francesco Colista <fcolista@alpinelinux.org>
 pkgname=oniguruma
-pkgver=6.4.0
+pkgver=6.7.0
 pkgrel=0
 pkgdesc="a regular expressions library"
 url="http://www.geocities.jp/kosako3/oniguruma/"
@@ -40,4 +40,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-sha512sums="91cd0c78cc8623905949c31ffdbc2831ef3344135ef1e23e4d4784ea0423003c5dbeddb74ea30f6db7f13d2c3db426e5de182f60c3ee556ec10adc95993aba16  oniguruma-6.4.0.tar.gz"
+sha512sums="f10088b9b6d9084f725edbfaca658de3b8807bda5e8670d28ee5762d829b0e58dea8c0dfcb98fe7d33ad87415514420996f9d60bc7ea5e3757f9fb2cee345a62  oniguruma-6.7.0.tar.gz"

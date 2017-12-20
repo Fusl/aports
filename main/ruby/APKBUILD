@@ -1,10 +1,24 @@
 # Contributor: Carlo Landmeter <clandmeter@gmail.com>
 # Contributor: Jakub Jirutka <jakub@jirutka.cz>
 # Maintainer: Natanael Copa <ncopa@alpinelinux.org>
+#
+# secfixes:
+#   2.4.2-r0:
+#     - CVE-2017-0898
+#     - CVE-2017-10784
+#     - CVE-2017-14033
+#     - CVE-2017-14064
+#     - CVE-2017-0899
+#     - CVE-2017-0900
+#     - CVE-2017-0901
+#     - CVE-2017-0902
+#   2.4.3-r0:
+#     - CVE-2017-17405
+#
 pkgname=ruby
-pkgver=2.4.1
+pkgver=2.4.3
 _abiver="${pkgver%.*}.0"
-pkgrel=4
+pkgrel=0
 pkgdesc="An object-oriented language for quick and easy programming"
 url="http://www.ruby-lang.org/en/"
 arch="all"
@@ -44,7 +58,7 @@ case "$CARCH" in
 esac
 
 prepare() {
-	default_prepare || return 1
+	default_prepare
 
 	cd "$builddir"
 	autoconf
@@ -78,19 +92,22 @@ build() {
 		--enable-pthread \
 		--disable-rpath \
 		--enable-shared \
-		--with-mantype=man \
-		|| return 1
-	make || return 1
-	make test || return 1
+		--with-mantype=man
+	make
+}
+
+check() {
+	cd "$builddir"
+	make test
 }
 
 package() {
 	cd "$builddir"
 
-	make DESTDIR="$pkgdir" install || return 1
+	make DESTDIR="$pkgdir" install
 
 	install -m 644 -D COPYING \
-		"$pkgdir"/usr/share/licenses/$pkgname/COPYING || return 1
+		"$pkgdir"/usr/share/licenses/$pkgname/COPYING
 
 	rm -R "$pkgdir"$_gemdir/cache/*
 
@@ -226,5 +243,5 @@ _mvgem() {
 	done
 }
 
-sha512sums="1c80d4c30ecb51758a193b26b76802a06d214de7f15570f1e85b5fae4cec81bda7237f086b81f6f2b5767f2e93d347ad1fa3f49d7b5c2e084d5f57c419503f74  ruby-2.4.1.tar.bz2
+sha512sums="fb4339e30c04d03b1422b6c32ede45902e072cd26325b36f3fc05c341d42eea6431d88718242dcc9ce24d9cad26f3d26772f2e806bd7d93f40be50268c318409  ruby-2.4.3.tar.bz2
 cfdc5ea3b2e2ea69c51f38e8e2180cb1dc27008ca55cc6301f142ebafdbab31c3379b3b6bba9ff543153876dd98ed2ad194df3255b7ea77a62e931c935f80538  rubygems-avoid-platform-specific-gems.patch"

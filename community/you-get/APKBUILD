@@ -1,7 +1,7 @@
 # Contributor: Ivan Tham <pickfire@riseup.net>
 # Maintainer: Ivan Tham <pickfire@riseup.net>
 pkgname=you-get
-pkgver=0.4.803
+pkgver=0.4.995
 pkgrel=0
 pkgdesc="Tiny command line utility to download media contents"
 url="https://you-get.org/"
@@ -27,4 +27,4 @@ package() {
 	python3 setup.py install --prefix=/usr --root="$pkgdir"
 }
 
-sha512sums="827031e0f8277e9369a8d364985d9d0bace1572e15de76a62b513a732d2bcc7d1286b3a7381491d02bce77dd103201ef4c47858091a8faf8ac3dc73ef11b2418  you-get-0.4.803.tar.gz"
+sha512sums="e4c8edfc25969ec65808761631b4b0ef291b9b285585f8c32e1140c4d983246c1a9553e08720f25258578bc9e2988b48cfb4cc5b41f742199dbd3e9407daf767  you-get-0.4.995.tar.gz"

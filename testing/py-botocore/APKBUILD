@@ -1,11 +1,11 @@
 # Maintainer: Valery Kartel <valery.kartel@gmail.com>
 # Contributor: Valery Kartel <valery.kartel@gmail.com>
 pkgname=py-botocore
-pkgver=1.5.71
+pkgver=1.8.11
 pkgrel=0
 _pkgreal=${pkgname#py-}
 pkgdesc="The low-level, core functionality of Boto3"
-url="https://github.com/boto/boto"
+url="https://github.com/boto/botocore"
 arch="noarch"
 license="ASL 2.0"
 options="!check"
@@ -46,4 +46,4 @@ _py() {
 	$python setup.py install --prefix=/usr --root="$subpkgdir"
 }
 
-sha512sums="4b5a7b56446bf1068bda0a30f2a4bef6b9016af3ea9009f1e142a75bffdaf3c321719e3147122d8c5d160d4ab7c53bd099f2599bb031557309fc1a71e41d6c09  botocore-1.5.71.tar.gz"
+sha512sums="5fc323ab27542b214662b36eaee8f5961c4744e7632620f1ff5100829bff4a1241004ee1463d1a324a17ee888f8dae67bb9a9867affb381f4cd3b511c9d319d7  botocore-1.8.11.tar.gz"

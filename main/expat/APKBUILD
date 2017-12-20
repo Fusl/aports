@@ -1,13 +1,12 @@
 # Maintainer: Carlo Landmeter <clandmeter@gmail.com>
 pkgname=expat
-pkgver=2.2.2
+pkgver=2.2.5
 pkgrel=0
 pkgdesc="An XML Parser library written in C"
 url="http://www.libexpat.org/"
 arch="all"
 license='MIT'
-depends=
-makedepends=
+checkdepends="bash"
 source="http://downloads.sourceforge.net/project/expat/expat/$pkgver/expat-$pkgver.tar.bz2"
 subpackages="$pkgname-dev $pkgname-doc"
 builddir="$srcdir/$pkgname-$pkgver"
@@ -26,8 +25,14 @@ build() {
 	make
 }
 
+check() {
+	cd "$builddir"
+	make check
+}
+
 package() {
 	cd "$builddir"
 	make DESTDIR="$pkgdir/" install
 }
-sha512sums="05383244f345b1c6a7290f3bb58bfab4da9546bfe880de644e784bcc48bd4317f2beb3fdb6120a5f396e06bb269f7e80713db211346d2d17bc7de3353d556575  expat-2.2.2.tar.bz2"
+
+sha512sums="8226970a7e5d2b8d7818081758ca59bb6ce2d655feaa9d3a92481629000b73fde4782f50343d58ec4e1cebe75649e1980f636775a731d8aa4b55ceb843d9f637  expat-2.2.5.tar.bz2"

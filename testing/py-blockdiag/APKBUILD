@@ -3,7 +3,7 @@
 pkgname=py-blockdiag
 _pkgname=blockdiag
 pkgver=1.5.3
-pkgrel=1
+pkgrel=2
 pkgdesc="A python tool to generate block-diagram"
 url="http://blockdiag.com"
 arch="noarch"
@@ -36,7 +36,7 @@ package() {
 
 _py2() {
 	replaces="$pkgname"
-	depends="${depends//py-/py2-}"
+	depends="${depends//py-/py2-} py-setuptools"
 	_py python2
 }
 

@@ -2,7 +2,7 @@
 # Maintainer: Fabian Affolter <fabian@affolter-engineering.ch>
 pkgname=py-psycopg2
 _pkgname=psycopg2
-pkgver=2.7.1
+pkgver=2.7.3.2
 pkgrel=0
 pkgdesc="A Python-PostgreSQL Database Adapter"
 url="http://initd.org/psycopg/"
@@ -16,7 +16,7 @@ builddir="$srcdir/$_pkgname-$pkgver"
 build() {
 	cd "$builddir"
 
-	python2 setup.py build || return 1
+	python2 setup.py build
 	python3 setup.py build
 }
 
@@ -43,4 +43,4 @@ _py() {
 	$python setup.py install --prefix=/usr --root="$subpkgdir"
 }
 
-sha512sums="dc46fb85ae47371efa64b59c2bd5ed8e05e966faa6c1176ab81b481b3d8157a6012bde31ffab3ee7704b2962566d5116fe6adcc635b50b58349f62a9fd893759  psycopg2-2.7.1.tar.gz"
+sha512sums="38460369e339b16e433328e9bd6ccdbb4b03e41d40b9fb453a54513af4ec43f0a72dc795de6eb13d9618e1d5636991d3de7f619459b3f21d070798d497b2776f  psycopg2-2.7.3.2.tar.gz"

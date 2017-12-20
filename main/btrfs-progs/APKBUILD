@@ -2,15 +2,16 @@
 # Contributor: Łukasz Jendrysik <scadu@yandex.com>
 # Maintainer: Natanael Copa <ncopa@alpinelinux.org>
 pkgname=btrfs-progs
-pkgver=4.11
-pkgrel=0
+pkgver=4.14
+pkgrel=1
 pkgdesc="BTRFS filesystem utilities"
 url="https://btrfs.wiki.kernel.org/"
 arch="all"
 license="GPL2"
 depends=""
+depends_dev="linux-headers"
 makedepends="util-linux-dev bash attr-dev acl-dev e2fsprogs-dev zlib-dev
-	lzo-dev asciidoc xmlto linux-headers
+	lzo-dev asciidoc xmlto $depends_dev
 	autoconf automake libtool"
 subpackages="$pkgname-doc $pkgname-dev $pkgname-bash-completion:completion:noarch
 	$pkgname-libs $pkgname-extra"
@@ -20,7 +21,7 @@ source="https://www.kernel.org/pub/linux/kernel/people/kdave/$pkgname/$pkgname-v
 builddir="$srcdir/$pkgname-v$pkgver"
 
 prepare() {
-	default_prepare || return 1
+	default_prepare
 
 	cd "$builddir"
 	./autogen.sh
@@ -36,18 +37,17 @@ build() {
 		--mandir=/usr/share/man \
 		--localstatedir=/var \
 		--disable-backtrace \
-		|| return 1
-	make || return 1
+		--disable-zstd
+	make
 }
 
 package() {
 	cd "$builddir"
-
-	make -j1 DESTDIR="$pkgdir" install || return 1
+	make -j1 DESTDIR="$pkgdir" install
 
 	mkdir "$pkgdir"/sbin
 	local i; for i in btrfs btrfsck fsck.btrfs mkfs.btrfs; do
-		mv "$pkgdir"/usr/bin/$i "$pkgdir"/sbin/ || return 1
+		mv "$pkgdir"/usr/bin/$i "$pkgdir"/sbin/
 	done
 	mv "$pkgdir"/usr/bin "$pkgdir"/usr/sbin
 }
@@ -65,10 +65,10 @@ extra() {
 	pkgdesc="BTRFS filesystem extra utilities"
 
 	mkdir -p "$subpkgdir"
-	mv "$pkgdir"/usr "$subpkgdir"/ || return 1
+	mv "$pkgdir"/usr "$subpkgdir"/
 	rmdir "$subpkgdir"/usr/lib
 }
 
-sha512sums="914fb415f7ddec4d3ee203b67cde135dcc4c62d3e25e76e920b9a0ee5099d1cf75d21611795ce5aee78908ed466dc74b0b7ab2e036224b7e357e421f13e4f6c8  btrfs-progs-v4.11.tar.xz
-96aa477d0879f1c94d51ce5cc8f31e8bc304a08788684b3837f96ba6aa622f94917f22c731f2e431fd10c84f3828bb16d6eb9a20ee128df5810a41d8df5e7aa4  includes.patch
+sha512sums="11171e6730f4aa102bdb4cd405da2d4c55e2c102fec4cc6d3135df516c78af1c34fede722a1677bd9c638b47e77085e005b29333ae70b98771501e32628890f7  btrfs-progs-v4.14.tar.xz
+dae1b9a5c9d2e4d45938207e5fdd81fe5d8484bea4242f0a7a5ee9445ae723cfcdb3070f723cf5f2abc434c643a81f59049a1a112379e437bab78040ce4596fe  includes.patch
 5c04ef0aa0390aa9b32fc8b8d3d0bfb16c61cb005eb70de8523f8eb709a2422960c1dea3ece11c7ae1442b538ea195b7eacba678a432e9bde7cb074392800af0  musl-compat.patch"
