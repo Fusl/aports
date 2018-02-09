@@ -4,7 +4,7 @@
 # Maintainer: Mika Havela <mika.havela@gmail.com>
 pkgname=motion
 pkgver=4.1.1
-pkgrel=0
+pkgrel=1
 pkgdesc="Detect if a significant part of the picture has changed (e.g. from a webcam)."
 url="https://motion-project.github.io"
 arch="all"
@@ -21,6 +21,7 @@ source="$pkgname-$pkgver.tar.gz::https://github.com/Motion-Project/$pkgname/arch
 	motion.confd
 	motion.initd
 	motion-dist.conf.in.patch
+	motion-pthread_attr_setstacksize.patch
 	"
 
 builddir="$srcdir"/$pkgname-release-$pkgver
@@ -55,4 +56,5 @@ package() {
 sha512sums="3b08d464f9243ccfc4b53b16cfc2001d1e0d206bf0295d55d8914914bc14ad0248ce5ac622cb7eb89ed32e1913a9a10add1b56497c4094ba876f7f85d6ad4143  motion-4.1.1.tar.gz
 8a67b5b0360924e58ba3136a737ce73bb43201a49b2b6e2c632426561b830f6ab55cbbeaa89be7f1683aa8fd322b4f31b9f560e67a93eaceb964c9f56ceef363  motion.confd
 be30f19595dba27f2d0ca8133c93e134161781935a152bd1701e581410039e37742acd11987c38e6e64f495b1fd2b0a74a8c61ae0e6e211a475fca7994172501  motion.initd
-c27d7ded3ed7a56101791bca86eb083450f5b8a1f431b3f7ee8538f682ac5f5d4b50104d9d61f40be964f1f1975a114313ba3d30d7357035dc25ebe925db6a89  motion-dist.conf.in.patch"
+c27d7ded3ed7a56101791bca86eb083450f5b8a1f431b3f7ee8538f682ac5f5d4b50104d9d61f40be964f1f1975a114313ba3d30d7357035dc25ebe925db6a89  motion-dist.conf.in.patch
+99764a3dbe011c97d28890b074185dd4c9478e68e2e5e7fa26919078628590285be782d2c0861bba9eef8c6f7992841ac4fbbda1874fe27762e5c6e575404c7f  motion-pthread_attr_setstacksize.patch"

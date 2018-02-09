@@ -1,0 +1,47 @@
+diff -urp a/motion.c b/motion.c
+--- a/motion.c	1970-01-01 00:00:00.000000000 +0000
++++ b/motion.c	1970-01-01 00:00:00.000000000 +0000
+@@ -3108,6 +3108,7 @@ int main (int argc, char **argv)
+      * their termination cannot be synchronized through 'pthread_join'.
+      */
+     pthread_attr_init(&thread_attr);
++    pthread_attr_setstacksize(&thread_attr, 8 * 1024 * 1024);
+     pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED);
+ 
+     /* Create the TLS key for thread number. */
+diff -urp a/netcam.c b/netcam.c
+--- a/netcam.c	1970-01-01 00:00:00.000000000 +0000
++++ b/netcam.c	1970-01-01 00:00:00.000000000 +0000
+@@ -768,6 +768,7 @@ int netcam_start(struct context *cnt){
+     cnt->imgs.size_high   = 0;
+ 
+     pthread_attr_init(&handler_attribute);
++    pthread_attr_setstacksize(&handler_attribute, 8 * 1024 * 1024);
+     pthread_attr_setdetachstate(&handler_attribute, PTHREAD_CREATE_DETACHED);
+     pthread_mutex_lock(&global_lock);
+         netcam->threadnr = ++threads_running;
+diff -urp a/netcam_rtsp.c b/netcam_rtsp.c
+--- a/netcam_rtsp.c	1970-01-01 00:00:00.000000000 +0000
++++ b/netcam_rtsp.c	1970-01-01 00:00:00.000000000 +0000
+@@ -1058,6 +1058,7 @@ static int netcam_rtsp_start_handler(rts
+     pthread_mutex_init(&rtsp_data->mutex, NULL);
+ 
+     pthread_attr_init(&handler_attribute);
++    pthread_attr_setstacksize(&handler_attribute, 8 * 1024 * 1024);
+     pthread_attr_setdetachstate(&handler_attribute, PTHREAD_CREATE_DETACHED);
+ 
+     pthread_mutex_lock(&global_lock);
+diff -urp a/stream.c b/stream.c
+--- a/stream.c	1970-01-01 00:00:00.000000000 +0000
++++ b/stream.c	1970-01-01 00:00:00.000000000 +0000
+@@ -719,6 +719,10 @@ static void do_client_auth(struct contex
+         goto Error;
+     }
+ 
++    if (pthread_attr_setstacksize(&attr, 8 * 1024 * 1024)) {
++        MOTION_LOG(ERR, TYPE_STREAM, SHOW_ERRNO, "Error pthread_attr_setstacksize");
++    }
++
+     if (pthread_create(&thread_id, &attr, handle_func, handle_param)) {
+         MOTION_LOG(ERR, TYPE_STREAM, SHOW_ERRNO, "Error pthread_create");
+         goto Error;
